@@ -39,7 +39,7 @@ void CNN_Model::Load_Numbers_From_File()
         auto file_name_line = lines[0];
         auto file_name = file_name_line.split('/')[0];
 
-        if (file_name_line.Contains("bias"))
+        if (file_name_line.contains("bias"))
         {
             m_Layers[file_name]->Initialize_Weights(lines);
             continue;

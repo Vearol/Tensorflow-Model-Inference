@@ -68,5 +68,10 @@ void Convolution_Layer::Initialize_Weights(const QStringList &text)
 
 void Convolution_Layer::Initialize_Biases(const QStringList &text)
 {
+    m_Biases.resize(m_NumFilters);
 
+    for (auto i = 1; i < m_NumFilters; i++)
+    {
+        m_Biases.push_back(text[i].toFloat());
+    }
 }

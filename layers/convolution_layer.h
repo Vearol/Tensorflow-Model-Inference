@@ -17,6 +17,7 @@ private:
     short m_NumFilters;
 
     QVector<arma::cube> m_Filters;
+    QVector<float> m_Biases;
 
 public:
     Convolution_Layer(const QString &name,
