@@ -1,12 +1,13 @@
 #include "convolution_layer.h"
 
-Convolution_Layer::Convolution_Layer(const QString &name, short inputHeight, short inputWidth, short horizontalStride,
-                                     short verticalStride) : Layer(name)
+#include <QDebug>
+
+Convolution_Layer::Convolution_Layer(const QString &name, short inputHeight, short inputWidth) : Layer(name)
 {
     m_InputHeight = inputHeight;
     m_InputWidth = inputWidth;
-    m_HorizontalStride = horizontalStride;
-    m_VerticalStride = verticalStride;
+    m_HorizontalStride = 1;
+    m_VerticalStride = 1;
 }
 
 void Convolution_Layer::Forward(arma::cube& input, arma::cube& output)
@@ -29,6 +30,8 @@ void Convolution_Layer::Forward(arma::cube& input, arma::cube& output)
 
 void Convolution_Layer::Initialize_Weights(const QStringList &text)
 {
+    qInfo() << m_Name << " Initialize Weights";
+
     auto line_counter = 0;
     auto layer_parameters_text = text[line_counter].split(' ')[1].remove(0, 1).split(", ");
 
@@ -59,7 +62,7 @@ void Convolution_Layer::Initialize_Weights(const QStringList &text)
 
                 for (auto filter = 0; filter < m_NumFilters; filter++)
                 {
-                    m_Filters[filter](height, width, depth) = weights_text_line[filter].toFloat();
+                    m_Filters[filter].at(height, width, depth) = weights_text_line[filter].toFloat();
                 }
             }
         }
@@ -68,10 +71,12 @@ void Convolution_Layer::Initialize_Weights(const QStringList &text)
 
 void Convolution_Layer::Initialize_Biases(const QStringList &text)
 {
-    m_Biases.resize(m_NumFilters);
+    qInfo() << m_Name << " Initialize Biases";
+
+    m_Biases(m_NumFilters);
 
     for (auto i = 1; i < m_NumFilters; i++)
     {
-        m_Biases.push_back(text[i].toFloat());
+        m_Biases.at(i) = text[i].toFloat();
     }
 }

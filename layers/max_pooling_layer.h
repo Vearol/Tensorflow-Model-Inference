@@ -25,7 +25,7 @@ public:
             short verticalStride,
             short horizontalStride);
 
-    void Forward(arma::cube &input, arma::cube &output);
+    void Forward(arma::cube &input, arma::cube &output) override;
 };
 
 #endif // MAX_POOLING_LAYER_H

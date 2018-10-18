@@ -15,9 +15,10 @@ public:
 
     virtual ~Layer();
 
-    virtual void Forward(arma::cube &input, arma::vec &output) = 0;
-    virtual void Initialize_Weights(const QStringList &text) = 0;
-    virtual void Initialize_Biases(const QStringList &text) = 0;
+    virtual void Forward(arma::cube &input, arma::cube &output);
+    virtual void Forward(arma::vec &input, arma::vec &output);
+    virtual void Initialize_Weights(const QStringList &text);
+    virtual void Initialize_Biases(const QStringList &text);
 
     QString Get_Name();
 };

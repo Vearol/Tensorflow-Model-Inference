@@ -1,11 +1,8 @@
 #include "relu_layer.h"
 
-ReLU_Layer::ReLU_Layer(const QString &name, short inputHeight, short inputWidth, short inputDepth)
+ReLU_Layer::ReLU_Layer(const QString &name)
     : Layer(name)
 {
-    m_InputHeight = inputHeight;
-    m_InputWidth = inputWidth;
-    m_InputDepth = inputDepth;
 }
 
 void ReLU_Layer::Forward(arma::cube& input, arma::cube& output)

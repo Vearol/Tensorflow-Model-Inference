@@ -5,19 +5,10 @@
 
 class ReLU_Layer : public Layer
 {
-private:
-    short m_InputHeight;
-    short m_InputWidth;
-    short m_InputDepth;
-
 public:
-    ReLU_Layer(
-            const QString &name,
-            short inputHeight,
-            short inputWidth,
-            short inputDepth);
+    ReLU_Layer(const QString &name);
 
-    void Forward(arma::cube &input, arma::cube &output);
+    void Forward(arma::cube &input, arma::cube &output) override;
 };
 
 #endif // RELU_LAYER_H

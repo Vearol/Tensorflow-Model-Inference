@@ -1,6 +1,8 @@
 #include "cnn_model.h"
+
 #include <QFile>
 #include <QTextStream>
+#include <QDebug>
 
 CNN_Model::CNN_Model()
 {    
@@ -14,6 +16,8 @@ CNN_Model::CNN_Model(const QString &path)
 void CNN_Model::Add_Layer(Layer *layer)
 {
     auto name = layer->Get_Name();
+
+    qInfo() << "Adding layer: " << name;
 
     if (m_Layers.contains(name)) return;
 
@@ -30,12 +34,20 @@ void CNN_Model::Load_Numbers_From_File()
 
     QTextStream in(&file);
 
-    auto line = in.readAll();
+    auto all_Text = in.readAll();
+    qInfo() << "File opened. Length: " << all_Text.size();
 
-    auto layer_info_array = line.split("New layer ");
-    for (auto layer_info : layer_info_array)
+    auto layer_info_array = all_Text.split("New layer ");
+
+    auto number_of_layers = layer_info_array.size();
+    qInfo() << number_of_layers + 1 << " layers.";
+
+    for (auto i = 0; i < number_of_layers; i++)
     {
-        auto lines = layer_info.split('\n');
+        qInfo() << i;
+
+        auto lines = layer_info_array[i].split('\n');
+
         auto file_name_line = lines[0];
         auto file_name = file_name_line.split('/')[0];
 

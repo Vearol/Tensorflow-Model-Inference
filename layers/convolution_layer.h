@@ -17,18 +17,16 @@ private:
     short m_NumFilters;
 
     QVector<arma::cube> m_Filters;
-    QVector<float> m_Biases;
+    arma::vec m_Biases;
 
 public:
     Convolution_Layer(const QString &name,
             short inputHeight,
-            short inputWidth,
-            short horizontalStride,
-            short verticalStride);
+            short inputWidth);
 
-    void Forward(arma::cube &input, arma::cube &output);
-    void Initialize_Weights(const QStringList &text);
-    void Initialize_Biases(const QStringList &text);
+    void Forward(arma::cube &input, arma::cube &output) override;
+    void Initialize_Weights(const QStringList &text) override;
+    void Initialize_Biases(const QStringList &text) override;
 
 };
 
