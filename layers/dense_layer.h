@@ -7,17 +7,17 @@ class Dense_Layer : public Layer
 {
 
 private:
-    arma::cube m_Input;
-
     arma::mat m_Weights;
     arma::vec m_Biases;
+
+    void Initialize_Weights(const QString &array_path) override;
+    void Initialize_Biases(const QString &array_path) override;
 
 public:
     Dense_Layer(const QString &name);
 
     void Forward(arma::vec &input, arma::vec &output) override;
-    void Initialize_Weights(const QStringList &text) override;
-    void Initialize_Biases(const QStringList &text) override;
+
 };
 
 #endif // DENSE_LAYER_H

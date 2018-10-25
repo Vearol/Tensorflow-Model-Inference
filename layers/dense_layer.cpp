@@ -1,4 +1,6 @@
 #include "dense_layer.h"
+#include "cnpy.h"
+
 #include <QDebug>
 
 Dense_Layer::Dense_Layer(const QString &name)
@@ -11,42 +13,39 @@ void Dense_Layer::Forward(arma::vec& input, arma::vec& output)
     output = (m_Weights * input) + m_Biases;
 }
 
-void Dense_Layer::Initialize_Weights(const QStringList &text)
+void Dense_Layer::Initialize_Weights(const QString &array_path)
 {
-    qInfo() << m_Name << " Initialize Weights";
+    auto array = cnpy::npz_load(array_path.toStdString(), "arr_0");
+    auto shape = array.shape;
+    auto array_numbers = array.data<float>();
 
-    auto line_counter = 0;
-    auto layer_parameters_text = text[line_counter].split(' ')[1].remove(0, 1).split(", ");
+    auto input_flatten_size = shape[0];
+    auto output_size = shape[1];
 
-    auto input_flatten_size = layer_parameters_text[0].toInt();
-    auto output_size = layer_parameters_text[1].toInt();
+    m_Weights = arma::zeros(input_flatten_size, output_size);
 
-    m_Weights(input_flatten_size, output_size);
 
     for (auto i = 0; i < output_size; i++)
     {
-        line_counter++;
-        auto weights_text_line = text[line_counter].split(' ');
-
         for (auto j = 0; j < input_flatten_size; j++)
         {
-            m_Weights.at(i, j) = weights_text_line[j].toFloat();
+            auto index = i + j;
+            m_Weights.at(i, j) = array_numbers[index];
         }
     }
+
 }
 
-void Dense_Layer::Initialize_Biases(const QStringList &text)
+void Dense_Layer::Initialize_Biases(const QString &array_path)
 {
-    qInfo() << m_Name << " Initialize Biases";
+    auto array = cnpy::npz_load(array_path.toStdString(), "arr_0");
+    auto shape = array.shape[0];
+    auto array_numbers = array.data<float>();
 
-    auto line_counter = 0;
-    auto layer_parameters_text = text[line_counter].split(' ')[1].remove(0, 1).split(", ");
+    m_Biases = arma::zeros(shape);
 
-    auto bias_size = layer_parameters_text[0].toInt();
-    m_Biases(bias_size);
-
-    for (auto i = 1; i < bias_size; i++)
+    for (auto i = 0; i < shape; i++)
     {
-        m_Biases.at(i) = text[i].toFloat();
+        m_Biases.at(i) = array_numbers[i];
     }
 }

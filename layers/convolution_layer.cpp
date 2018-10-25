@@ -1,4 +1,5 @@
 #include "convolution_layer.h"
+#include "cnpy.h"
 
 #include <QDebug>
 
@@ -28,17 +29,16 @@ void Convolution_Layer::Forward(arma::cube& input, arma::cube& output)
 
 }
 
-void Convolution_Layer::Initialize_Weights(const QStringList &text)
+void Convolution_Layer::Initialize_Weights(const QString &array_path)
 {
-    qInfo() << m_Name << " Initialize Weights";
+    auto array = cnpy::npz_load(array_path.toStdString(), "arr_0");
+    auto shape = array.shape;
+    auto array_numbers = array.data<float>();
 
-    auto line_counter = 0;
-    auto layer_parameters_text = text[line_counter].split(' ')[1].remove(0, 1).split(", ");
-
-    m_FilterHeight = layer_parameters_text[0].toInt();
-    m_FilterWidth = layer_parameters_text[1].toInt();
-    m_InputDepth = layer_parameters_text[2].toInt();
-    m_NumFilters = layer_parameters_text[3].toInt();
+    m_FilterWidth = shape[0];
+    m_FilterHeight = shape[1];
+    m_InputDepth = shape[2];
+    m_NumFilters = shape[3];
 
     m_Filters.reserve(m_NumFilters);
 
@@ -47,36 +47,33 @@ void Convolution_Layer::Initialize_Weights(const QStringList &text)
         m_Filters.push_back(arma::cube(m_FilterHeight, m_FilterWidth, m_InputDepth));
     }
 
+
     for (auto height = 0; height < m_FilterHeight; height++)
     {
-        line_counter++;
-
         for (auto width = 0; width < m_FilterWidth; width++)
         {
-            line_counter++;
-
-            for (auto depth = 0; depth < m_InputDepth; depth++)
+            for (auto depth = 0; width < m_InputDepth; depth++)
             {
-                line_counter++;
-                auto weights_text_line = text[line_counter].split(' ');
-
                 for (auto filter = 0; filter < m_NumFilters; filter++)
                 {
-                    m_Filters[filter].at(height, width, depth) = weights_text_line[filter].toFloat();
+                    auto index = height + width + depth + filter;
+                    m_Filters[filter].at(height, width, depth) = array_numbers[index];
                 }
             }
         }
     }
 }
 
-void Convolution_Layer::Initialize_Biases(const QStringList &text)
+void Convolution_Layer::Initialize_Biases(const QString &array_path)
 {
-    qInfo() << m_Name << " Initialize Biases";
+    auto array = cnpy::npz_load(array_path.toStdString(), "arr_0");
+    auto shape = array.shape[0];
+    auto array_numbers = array.data<float>();
 
-    m_Biases(m_NumFilters);
+    m_Biases = arma::zeros(shape);
 
-    for (auto i = 1; i < m_NumFilters; i++)
+    for (auto i = 0; i < shape; i++)
     {
-        m_Biases.at(i) = text[i].toFloat();
+        m_Biases.at(i) = array_numbers[i];
     }
 }

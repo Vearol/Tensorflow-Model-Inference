@@ -19,15 +19,15 @@ private:
     QVector<arma::cube> m_Filters;
     arma::vec m_Biases;
 
+    void Initialize_Weights(const QString &array_path) override;
+    void Initialize_Biases(const QString &array_path) override;
+
 public:
     Convolution_Layer(const QString &name,
             short inputHeight,
             short inputWidth);
 
-    void Forward(arma::cube &input, arma::cube &output) override;
-    void Initialize_Weights(const QStringList &text) override;
-    void Initialize_Biases(const QStringList &text) override;
-
+    void Forward(arma::cube &input, arma::cube &output) override;    
 };
 
 #endif // CONVOLUTION_LAYER_H

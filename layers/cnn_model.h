@@ -9,13 +9,13 @@ class CNN_Model
 {
 public:
     CNN_Model();
-    CNN_Model(const QString &path);
+    CNN_Model(const QString &layers_directory_path);
 
     void Add_Layer(Layer* layer);
     void Load_Numbers_From_File();
 
 private:
-    QString m_Model_File_Path;
+    QString m_LayersDirectoryPath;
     QMap<QString, Layer*> m_Layers;
 };
 

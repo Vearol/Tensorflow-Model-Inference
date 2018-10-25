@@ -9,13 +9,15 @@
 #include "layers/dense_layer.h"
 #include "layers/softmax_layer.h"
 
+#include "cnpy.h"
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    QString path = "/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/src/modelExport/model-18000.txt";
-    //QString path = "/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/src/model-18000.txt";
+    //cnpy::NpyArray arr2 = cnpy::npz_load("/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/src/modelExport/saved_Layers/conv1_1/kernel:0.npz","arr_0");
 
+    QString path = "/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/src/modelExport/saved_Layers";
     CNN_Model model(path);
 
     //56 x 56 x 3
@@ -103,8 +105,7 @@ int main(int argc, char *argv[])
     model.Add_Layer(soft_max);
 
     model.Load_Numbers_From_File();
-
-
+    */
 
     return a.exec();
 }
