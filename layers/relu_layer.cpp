@@ -1,7 +1,6 @@
 #include "relu_layer.h"
 
-ReLU_Layer::ReLU_Layer(const QString &name)
-    : Layer(name)
+ReLU_Layer::ReLU_Layer(const QString &name) : Functional_layer(name)
 {
 }
 

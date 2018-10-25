@@ -1,6 +1,6 @@
 #include "softmax_layer.h"
 
-Softmax_Layer::Softmax_Layer(const QString &name) : Layer(name)
+Softmax_Layer::Softmax_Layer(const QString &name) : Functional_layer(name)
 {
 }
 

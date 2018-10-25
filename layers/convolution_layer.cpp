@@ -3,7 +3,7 @@
 
 #include <QDebug>
 
-Convolution_Layer::Convolution_Layer(const QString &name, short inputHeight, short inputWidth) : Layer(name)
+Convolution_Layer::Convolution_Layer(const QString &name, short inputHeight, short inputWidth) : Physical_Layer(name)
 {
     m_InputHeight = inputHeight;
     m_InputWidth = inputWidth;
@@ -61,19 +61,5 @@ void Convolution_Layer::Initialize_Weights(const QString &array_path)
                 }
             }
         }
-    }
-}
-
-void Convolution_Layer::Initialize_Biases(const QString &array_path)
-{
-    auto array = cnpy::npz_load(array_path.toStdString(), "arr_0");
-    auto shape = array.shape[0];
-    auto array_numbers = array.data<float>();
-
-    m_Biases = arma::zeros(shape);
-
-    for (auto i = 0; i < shape; i++)
-    {
-        m_Biases.at(i) = array_numbers[i];
     }
 }

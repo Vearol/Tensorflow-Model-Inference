@@ -1,9 +1,9 @@
 #ifndef MAX_POOLING_LAYER_H
 #define MAX_POOLING_LAYER_H
 
-#include "layer.h"
+#include "functional_layer.h"
 
-class Max_Pooling_Layer : public Layer
+class Max_Pooling_Layer : public Functional_layer
 {
 private:
     short m_InputHeight;

@@ -1,9 +1,9 @@
 #ifndef RELU_LAYER_H
 #define RELU_LAYER_H
 
-#include "layer.h"
+#include "functional_layer.h"
 
-class ReLU_Layer : public Layer
+class ReLU_Layer : public Functional_layer
 {
 public:
     ReLU_Layer(const QString &name);

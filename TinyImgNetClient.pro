@@ -27,7 +27,9 @@ SOURCES += main.cpp \
     layers/max_pooling_layer.cpp \
     layers/relu_layer.cpp \
     layers/softmax_layer.cpp \
-    layers/layer.cpp
+    layers/layer.cpp \
+    layers/physical_layer.cpp \
+    layers/functional_layer.cpp
 
 HEADERS += \
     layers/cnn_model.h \
@@ -36,7 +38,9 @@ HEADERS += \
     layers/max_pooling_layer.h \
     layers/relu_layer.h \
     layers/softmax_layer.h \
-    layers/layer.h
+    layers/layer.h \
+    layers/physical_layer.h \
+    layers/functional_layer.h
 
 unix:!macx: LIBS += -L$$PWD/../../../../../../../../usr/local/lib/ -lcnpy
 

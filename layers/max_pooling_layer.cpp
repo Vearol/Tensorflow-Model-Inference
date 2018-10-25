@@ -2,7 +2,7 @@
 
 Max_Pooling_Layer::Max_Pooling_Layer(const QString &name, short inputHeight, short inputWidth, short inputDepth,
                                      short poolingWindowHeight, short poolingWindowWidth, short verticalStride,
-                                     short horizontalStride) : Layer(name)
+                                     short horizontalStride) : Functional_layer(name)
 {
     m_InputHeight = inputHeight;
     m_InputWidth = inputWidth;

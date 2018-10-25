@@ -3,8 +3,7 @@
 
 #include <QDebug>
 
-Dense_Layer::Dense_Layer(const QString &name)
-    : Layer(name)
+Dense_Layer::Dense_Layer(const QString &name): Physical_Layer(name)
 {
 }
 
@@ -34,18 +33,4 @@ void Dense_Layer::Initialize_Weights(const QString &array_path)
         }
     }
 
-}
-
-void Dense_Layer::Initialize_Biases(const QString &array_path)
-{
-    auto array = cnpy::npz_load(array_path.toStdString(), "arr_0");
-    auto shape = array.shape[0];
-    auto array_numbers = array.data<float>();
-
-    m_Biases = arma::zeros(shape);
-
-    for (auto i = 0; i < shape; i++)
-    {
-        m_Biases.at(i) = array_numbers[i];
-    }
 }

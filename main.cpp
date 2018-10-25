@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     model.Add_Layer(soft_max);
 
     model.Load_Numbers_From_File();
-    */
+
 
     return a.exec();
 }

@@ -2,9 +2,9 @@
 #define CONVOLUTION_LAYER_H
 
 #include <QVector>
-#include "layer.h"
+#include "physical_layer.h"
 
-class Convolution_Layer : public Layer
+class Convolution_Layer : public Physical_Layer
 {
 private:
     short m_InputHeight;
@@ -17,10 +17,8 @@ private:
     short m_NumFilters;
 
     QVector<arma::cube> m_Filters;
-    arma::vec m_Biases;
 
-    void Initialize_Weights(const QString &array_path) override;
-    void Initialize_Biases(const QString &array_path) override;
+    void Initialize_Weights(const QString &array_path);
 
 public:
     Convolution_Layer(const QString &name,
