@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     Layer* conv3_2 = new Convolution_Layer("conv3_2", 14, 14);
     Layer* relu3_2 = new ReLU_Layer("relu3_2");
 
-    Layer* conv3_3 = new Convolution_Layer("conv3_2", 14, 14);
+    Layer* conv3_3 = new Convolution_Layer("conv3_3", 14, 14);
     Layer* relu3_3 = new ReLU_Layer("relu3_2");
     
     Layer* max_pool_3 = new Max_Pooling_Layer("max_pool_3", 14, 14, 256, 2, 2, 2, 2);
@@ -57,23 +57,23 @@ int main(int argc, char *argv[])
     Layer* conv4_2 = new Convolution_Layer("conv4_2", 7, 7);
     Layer* relu4_2 = new ReLU_Layer("relu4_2");
 
-    Layer* conv4_3 = new Convolution_Layer("conv4_2", 7, 7);
+    Layer* conv4_3 = new Convolution_Layer("conv4_3", 7, 7);
     Layer* relu4_3 = new ReLU_Layer("relu4_2");
     
     Layer* max_pool_4 = new Max_Pooling_Layer("max_pool_4", 7, 7, 512, 2, 2, 2, 2);
 
     //7 x 7 x 512 -> (25088; 4096)
-    Layer* dense1 = new Dense_Layer("fc1");
+    Layer* dense_1 = new Dense_Layer("fc1");
+    Layer* relu_dense1 = new ReLU_Layer("relu_dense1");
 
     //4096 x 2048
-    Layer* dense2 = new Dense_Layer("fc2");
+    Layer* dense_2 = new Dense_Layer("fc2");
+    Layer* relu_dense2 = new ReLU_Layer("relu_dense2");
 
     //2048 x 200
-    Layer* dense3 = new Dense_Layer("fc3");
+    Layer* dense_3 = new Dense_Layer("fc3");
 
     Layer* soft_max = new Softmax_Layer("soft_max");
-
-    qInfo() << "Created Layers";
 
     model.Add_Layer(conv1_1);
     model.Add_Layer(conv1_2);
@@ -95,16 +95,81 @@ int main(int argc, char *argv[])
     model.Add_Layer(relu4_1);
     model.Add_Layer(relu4_2);
     model.Add_Layer(relu4_3);
+    model.Add_Layer(relu_dense1);
+    model.Add_Layer(relu_dense2);
     model.Add_Layer(max_pool_1);
     model.Add_Layer(max_pool_2);
     model.Add_Layer(max_pool_3);
     model.Add_Layer(max_pool_4);
-    model.Add_Layer(dense1);
-    model.Add_Layer(dense2);
-    model.Add_Layer(dense3);
+    model.Add_Layer(dense_1);
+    model.Add_Layer(dense_2);
+    model.Add_Layer(dense_3);
     model.Add_Layer(soft_max);
 
     model.Load_Numbers_From_File();
+
+    arma::cube conv1_1_out = arma::zeros(56, 56, 64);
+    arma::cube conv1_2_out = arma::zeros(56, 56, 64);
+    arma::cube conv2_1_out = arma::zeros(28, 28, 128);
+    arma::cube conv2_2_out = arma::zeros(28, 28, 128);
+    arma::cube conv3_1_out = arma::zeros(14, 14, 256);
+    arma::cube conv3_2_out = arma::zeros(14, 14, 256);
+    arma::cube conv3_3_out = arma::zeros(14, 14, 256);
+    arma::cube conv4_1_out = arma::zeros(7, 7, 512);
+    arma::cube conv4_2_out = arma::zeros(7, 7, 512);
+    arma::cube conv4_3_out = arma::zeros(7, 7, 512);
+    arma::cube relu1_1_out = arma::zeros(56, 56, 64);
+    arma::cube relu1_2_out = arma::zeros(56, 56, 64);
+    arma::cube relu2_1_out = arma::zeros(14, 14, 256);
+    arma::cube relu2_2_out = arma::zeros(14, 14, 256);
+    arma::cube relu3_1_out = arma::zeros(14, 14, 256);
+    arma::cube relu3_2_out = arma::zeros(14, 14, 256);
+    arma::cube relu3_3_out = arma::zeros(14, 14, 256);
+    arma::cube relu4_1_out = arma::zeros(7, 7, 512);
+    arma::cube relu4_2_out = arma::zeros(7, 7, 512);
+    arma::cube relu4_3_out = arma::zeros(7, 7, 512);
+    arma::vec relu_dense1_out = arma::zeros(4096);
+    arma::vec relu_dense2_out = arma::zeros(2048);
+    arma::cube max_pool_1_out = arma::zeros(28, 28, 128);
+    arma::cube max_pool_2_out = arma::zeros(14, 14, 256);
+    arma::cube max_pool_3_out = arma::zeros(7, 7, 512);
+    arma::vec dense_1_out = arma::zeros(4096);
+    arma::vec dense_2_out = arma::zeros(2048);
+    arma::vec dense_3_out = arma::zeros(200);
+
+    auto input = arma::cube(56, 56, 3, arma::fill::randu);
+
+    conv1_1->Forward(input, conv1_1_out);
+    relu1_1->Forward(conv1_1_out, relu1_1_out);
+    conv1_2->Forward(relu1_1_out, conv1_2_out);
+    relu1_2->Forward(conv1_1_out, relu1_2_out);
+    max_pool_1->Forward(relu1_2_out, max_pool_1_out);
+    conv2_1->Forward(max_pool_1_out, conv2_1_out);
+    relu2_1->Forward(conv2_1_out, relu2_1_out);
+    conv2_2->Forward(relu2_1_out, conv2_2_out);
+    relu2_2->Forward(conv2_1_out, relu2_2_out);
+    max_pool_2->Forward(relu2_2_out, max_pool_2_out);
+    conv3_1->Forward(max_pool_2_out, conv3_1_out);
+    relu3_1->Forward(conv3_1_out, relu3_1_out);
+    conv3_2->Forward(relu3_1_out, conv3_2_out);
+    relu3_2->Forward(conv3_1_out, relu3_2_out);
+    conv3_3->Forward(relu3_2_out, conv3_3_out);
+    relu3_3->Forward(conv3_3_out, relu3_3_out);
+    max_pool_3->Forward(relu3_3_out, max_pool_3_out);
+    conv4_1->Forward(max_pool_3_out, conv4_1_out);
+    relu4_1->Forward(conv4_1_out, relu4_1_out);
+    conv4_2->Forward(relu4_1_out, conv4_2_out);
+    relu4_2->Forward(conv4_1_out, relu4_2_out);
+    conv4_3->Forward(relu4_2_out, conv4_3_out);
+    relu4_3->Forward(conv4_3_out, relu4_3_out);
+    arma::vec flatten = arma::vectorise(relu4_3_out);
+    dense_1->Forward(flatten, dense_1_out);
+    relu_dense1->Forward(dense_1_out, relu_dense1_out);
+    dense_2->Forward(relu_dense1_out, dense_2_out);
+    relu_dense2->Forward(dense_2_out, relu_dense2_out);
+    dense_3->Forward(relu_dense2_out, dense_3_out);
+
+    qInfo() << dense_3_out.at(0);
 
 
     return a.exec();

@@ -21,17 +21,15 @@ void Convolution_Layer::Forward(arma::cube& input, arma::cube& output)
         for (auto i = 0; i <= m_InputHeight - m_FilterHeight; i += m_VerticalStride)
             for (auto j = 0; j <= m_InputWidth - m_FilterWidth; j += m_HorizontalStride)
                 output((i / m_VerticalStride), (j / m_HorizontalStride), filter) = arma::dot(
-                            arma::vectorise(
-                                input.subcube(i, j, 0,
-                                              i + m_FilterHeight - 1, j + m_FilterWidth - 1, m_InputDepth - 1)
-                                ),
+                            arma::vectorise(input.subcube(i, j, 0, i + m_FilterHeight - 1,
+                                                          j + m_FilterWidth - 1, m_InputDepth - 1)),
                             arma::vectorise(m_Filters[filter]));
 
 }
 
-void Convolution_Layer::Initialize_Weights(const QString &array_path)
+void Convolution_Layer::Initialize_Weights(const std::string &array_path)
 {
-    auto array = cnpy::npz_load(array_path.toStdString(), "arr_0");
+    auto array = cnpy::npz_load(array_path, "arr_0");
     auto shape = array.shape;
     auto array_numbers = array.data<float>();
 
@@ -52,7 +50,7 @@ void Convolution_Layer::Initialize_Weights(const QString &array_path)
     {
         for (auto width = 0; width < m_FilterWidth; width++)
         {
-            for (auto depth = 0; width < m_InputDepth; depth++)
+            for (auto depth = 0; depth < m_InputDepth; depth++)
             {
                 for (auto filter = 0; filter < m_NumFilters; filter++)
                 {

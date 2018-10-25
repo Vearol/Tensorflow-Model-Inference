@@ -9,7 +9,7 @@ class Dense_Layer : public Physical_Layer
 private:
     arma::mat m_Weights;
 
-    void Initialize_Weights(const QString &array_path) override;
+    void Initialize_Weights(const std::string &array_path) override;
 
 public:
     Dense_Layer(const QString &name);

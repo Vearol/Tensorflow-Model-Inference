@@ -12,28 +12,28 @@ Physical_Layer::Physical_Layer(const QString &name) : Layer(name)
 void Physical_Layer::Initialize_Weights_and_Biases(const QString &layer_directory_path)
 {
     QDir directory(layer_directory_path);
-    QStringList npz_arrays = directory.entryList(QStringList() << "*.npz");
+    auto npz_arrays = directory.entryInfoList(QStringList() << "*.npz");
 
     foreach (auto array_path, npz_arrays)
     {
-        if (array_path.contains("kernel"))
+        auto full_path = array_path.absoluteFilePath();
+
+        if (full_path.contains("kernel"))
         {
-            Initialize_Weights(array_path);
+            Initialize_Weights(full_path.toStdString());
             continue;
         }
 
-        if (array_path.contains("bias"))
+        if (full_path.contains("bias"))
         {
-            Initialize_Biases(array_path);
+            Initialize_Biases(full_path.toStdString());
         }
     }
 }
 
-void Physical_Layer::Initialize_Biases(const QString &array_path)
+void Physical_Layer::Initialize_Biases(const std::string &array_path)
 {
-    qInfo() << m_Name << array_path;
-
-    auto array = cnpy::npz_load(array_path.toStdString(), "arr_0");
+    auto array = cnpy::npz_load(array_path, "arr_0");
     auto shape = array.shape[0];
     auto array_numbers = array.data<float>();
 

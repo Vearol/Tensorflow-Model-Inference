@@ -1,6 +1,6 @@
 #include "cnn_model.h"
 
-#include <QDirIterator>
+#include <QDir>
 #include <QDebug>
 
 CNN_Model::CNN_Model()
@@ -23,16 +23,18 @@ void CNN_Model::Add_Layer(Layer *layer)
 
 void CNN_Model::Load_Numbers_From_File()
 {
-    QDirIterator dir_iterator(m_LayersDirectoryPath, QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+    QDir layers_directory(m_LayersDirectoryPath);
+    auto directories = layers_directory.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-    while (dir_iterator.hasNext())
+    foreach (auto directory, directories)
     {
-        auto current_directory = dir_iterator.next();
-        auto layer_directory_path = current_directory;
-        auto layer_name = current_directory.remove(m_LayersDirectoryPath).remove('/');
+        auto layer_directory_path = directory.absoluteFilePath();
+
+        auto layer_name = directory.absoluteFilePath().remove(m_LayersDirectoryPath).remove('/');
 
         if (m_Layers.contains(layer_name))
         {
+            qInfo() << "Loading: " << layer_name;
             m_Layers[layer_name]->Initialize_Weights_and_Biases(layer_directory_path);
         }
     }

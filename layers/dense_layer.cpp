@@ -12,9 +12,9 @@ void Dense_Layer::Forward(arma::vec& input, arma::vec& output)
     output = (m_Weights * input) + m_Biases;
 }
 
-void Dense_Layer::Initialize_Weights(const QString &array_path)
+void Dense_Layer::Initialize_Weights(const std::string &array_path)
 {
-    auto array = cnpy::npz_load(array_path.toStdString(), "arr_0");
+    auto array = cnpy::npz_load(array_path, "arr_0");
     auto shape = array.shape;
     auto array_numbers = array.data<float>();
 

@@ -13,10 +13,10 @@ protected:
 
     void Initialize_Weights_and_Biases(const QString &layer_directory_path) override;
 
-    virtual void Initialize_Weights(const QString &array_path) = 0;
+    virtual void Initialize_Weights(const std::string &array_path) = 0;
 
 private:
-    void Initialize_Biases(const QString &array_path);
+    void Initialize_Biases(const std::string &array_path);
 };
 
 

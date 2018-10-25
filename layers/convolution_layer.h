@@ -18,7 +18,7 @@ private:
 
     QVector<arma::cube> m_Filters;
 
-    void Initialize_Weights(const QString &array_path);
+    void Initialize_Weights(const std::string &array_path);
 
 public:
     Convolution_Layer(const QString &name,
