@@ -13,9 +13,7 @@ Convolution_Layer::Convolution_Layer(const QString &name, short inputHeight, sho
 
 void Convolution_Layer::Forward(arma::cube& input, arma::cube& output)
 {
-    output = arma::zeros((m_InputHeight - m_FilterHeight) / m_VerticalStride + 1,
-                         (m_InputWidth - m_FilterWidth) / m_HorizontalStride + 1,
-                         m_NumFilters);
+    output = arma::zeros(m_InputHeight, m_InputWidth, m_NumFilters);
 
     for (auto filter = 0; filter < m_NumFilters; filter++)
         for (auto i = 0; i <= m_InputHeight - m_FilterHeight; i += m_VerticalStride)

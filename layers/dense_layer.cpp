@@ -21,8 +21,7 @@ void Dense_Layer::Initialize_Weights(const std::string &array_path)
     auto input_flatten_size = shape[0];
     auto output_size = shape[1];
 
-    m_Weights = arma::zeros(input_flatten_size, output_size);
-
+    m_Weights = arma::zeros(output_size, input_flatten_size);
 
     for (auto i = 0; i < output_size; i++)
     {
