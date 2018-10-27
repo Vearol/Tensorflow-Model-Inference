@@ -23,11 +23,12 @@ void Dense_Layer::Initialize_Weights(const std::string &array_path)
 
     m_Weights = arma::zeros(output_size, input_flatten_size);
 
+    auto index = 0;
     for (auto i = 0; i < output_size; i++)
     {
         for (auto j = 0; j < input_flatten_size; j++)
         {
-            auto index = i + j;
+            index++;
             m_Weights.at(i, j) = array_numbers[index];
         }
     }

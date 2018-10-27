@@ -152,8 +152,6 @@ int main(int argc, char *argv[])
             input.at(i, j, 0) = qRed(pixel) / 255.f;
             input.at(i, j, 1) = qGreen(pixel) / 255.f;
             input.at(i, j, 2) = qBlue(pixel) / 255.f;
-
-            qInfo() << input.at(i, j, 0) << input.at(i, j, 1) << input.at(i, j, 2);
         }
     }
 

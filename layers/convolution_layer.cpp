@@ -44,6 +44,7 @@ void Convolution_Layer::Initialize_Weights(const std::string &array_path)
     }
 
 
+    auto index = 0;
     for (auto height = 0; height < m_FilterHeight; height++)
     {
         for (auto width = 0; width < m_FilterWidth; width++)
@@ -52,7 +53,7 @@ void Convolution_Layer::Initialize_Weights(const std::string &array_path)
             {
                 for (auto filter = 0; filter < m_NumFilters; filter++)
                 {
-                    auto index = height + width + depth + filter;
+                    index++;
                     m_Filters[filter].at(height, width, depth) = array_numbers[index];
                 }
             }
