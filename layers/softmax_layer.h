@@ -8,7 +8,7 @@ class Softmax_Layer : public Functional_layer
 public:
     Softmax_Layer(const QString &name);
 
-    void Forward(arma::vec &input, arma::vec &output) override;
+    void forward(arma::vec &input, arma::vec &output) override;
 };
 
 #endif // SOFTMAX_LAYER_H

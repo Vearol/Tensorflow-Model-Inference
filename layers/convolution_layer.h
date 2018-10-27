@@ -18,14 +18,14 @@ private:
 
     QVector<arma::cube> m_Filters;
 
-    void Initialize_Weights(const std::string &array_path);
+    void initialize_weights(const std::string &array_path);
 
 public:
     Convolution_Layer(const QString &name,
             short inputHeight,
             short inputWidth);
 
-    void Forward(arma::cube &input, arma::cube &output) override;    
+    void forward(arma::cube &input, arma::cube &output) override;
 };
 
 #endif // CONVOLUTION_LAYER_H

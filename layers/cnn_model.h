@@ -8,15 +8,25 @@
 class CNN_Model
 {
 public:
-    CNN_Model();
     CNN_Model(const QString &layers_directory_path);
 
-    void Add_Layer(Layer* layer);
-    void Load_Numbers_From_File();
+    void load_numbers_from_file();
+    void get_predicted_labels();
 
-private:
-    QString m_LayersDirectoryPath;
+    virtual void forward(const QString &image_path) = 0;
+    virtual void init() = 0;
+    virtual void top_n(int n) = 0;
+
+protected:
+    QString m_Layers_directory_path;
     QMap<QString, Layer*> m_Layers;
+
+    QMap<float, QString> m_Output_labels;
+    QMap<QString, QString> m_Labels_text;
+
+    arma::vec m_Model_output = arma::zeros(200);
+
+    void add_layer(Layer* layer);
 };
 
 #endif // CNN_MODEL_H

@@ -14,12 +14,12 @@ public:
 
     virtual ~Layer();
 
-    virtual void Forward(arma::cube &input, arma::cube &output);
-    virtual void Forward(arma::vec &input, arma::vec &output);
+    virtual void forward(arma::cube &input, arma::cube &output);
+    virtual void forward(arma::vec &input, arma::vec &output);
 
-    virtual void Initialize_Weights_and_Biases(const QString &layer_directory_path);
+    virtual void initialize_weights_and_Biases(const QString &layer_directory_path);
 
-    QString Get_Name();
+    QString get_name();
 };
 
 #endif // LAYER_H

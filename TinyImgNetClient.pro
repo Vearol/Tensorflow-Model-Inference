@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     layers/softmax_layer.cpp \
     layers/layer.cpp \
     layers/physical_layer.cpp \
-    layers/functional_layer.cpp
+    layers/functional_layer.cpp \
+    layers/vgg16.cpp
 
 HEADERS += \
     layers/cnn_model.h \
@@ -40,7 +41,8 @@ HEADERS += \
     layers/softmax_layer.h \
     layers/layer.h \
     layers/physical_layer.h \
-    layers/functional_layer.h
+    layers/functional_layer.h \
+    layers/vgg16.h
 
 unix:!macx: LIBS += -L$$PWD/../../../../../../../../usr/local/lib/ -lcnpy
 

@@ -9,7 +9,7 @@ Physical_Layer::Physical_Layer(const QString &name) : Layer(name)
 
 }
 
-void Physical_Layer::Initialize_Weights_and_Biases(const QString &layer_directory_path)
+void Physical_Layer::initialize_weights_and_Biases(const QString &layer_directory_path)
 {
     QDir directory(layer_directory_path);
     auto npz_arrays = directory.entryInfoList(QStringList() << "*.npz");
@@ -20,18 +20,18 @@ void Physical_Layer::Initialize_Weights_and_Biases(const QString &layer_director
 
         if (full_path.contains("kernel"))
         {
-            Initialize_Weights(full_path.toStdString());
+            initialize_weights(full_path.toStdString());
             continue;
         }
 
         if (full_path.contains("bias"))
         {
-            Initialize_Biases(full_path.toStdString());
+            initialize_biases(full_path.toStdString());
         }
     }
 }
 
-void Physical_Layer::Initialize_Biases(const std::string &array_path)
+void Physical_Layer::initialize_biases(const std::string &array_path)
 {
     auto array = cnpy::npz_load(array_path, "arr_0");
     auto shape = array.shape[0];

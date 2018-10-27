@@ -13,13 +13,13 @@ Layer::~Layer()
 {
 }
 
-void Layer::Forward(arma::cube &input, arma::cube &output) { }
+void Layer::forward(arma::cube &input, arma::cube &output) { }
 
-void Layer::Forward(arma::vec &input, arma::vec &output) { }
+void Layer::forward(arma::vec &input, arma::vec &output) { }
 
-void Layer::Initialize_Weights_and_Biases(const QString &layer_directory_path) { }
+void Layer::initialize_weights_and_Biases(const QString &layer_directory_path) { }
 
-QString Layer::Get_Name()
+QString Layer::get_name()
 {
     return m_Name;
 }

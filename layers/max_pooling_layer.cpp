@@ -13,7 +13,7 @@ Max_Pooling_Layer::Max_Pooling_Layer(const QString &name, short inputHeight, sho
     m_HorizontalStride = horizontalStride;
 }
 
-void Max_Pooling_Layer::Forward(arma::cube& input, arma::cube& output)
+void Max_Pooling_Layer::forward(arma::cube& input, arma::cube& output)
 {
     output = arma::zeros(
                 (m_InputHeight - m_PoolingWindowHeight) / m_VerticalStride + 1,

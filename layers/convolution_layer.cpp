@@ -11,7 +11,7 @@ Convolution_Layer::Convolution_Layer(const QString &name, short inputHeight, sho
     m_VerticalStride = 1;
 }
 
-void Convolution_Layer::Forward(arma::cube& input, arma::cube& output)
+void Convolution_Layer::forward(arma::cube& input, arma::cube& output)
 {
     output = arma::zeros(m_InputHeight, m_InputWidth, m_NumFilters);
 
@@ -25,7 +25,7 @@ void Convolution_Layer::Forward(arma::cube& input, arma::cube& output)
 
 }
 
-void Convolution_Layer::Initialize_Weights(const std::string &array_path)
+void Convolution_Layer::initialize_weights(const std::string &array_path)
 {
     auto array = cnpy::npz_load(array_path, "arr_0");
     auto shape = array.shape;

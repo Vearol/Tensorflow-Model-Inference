@@ -7,12 +7,12 @@ Dense_Layer::Dense_Layer(const QString &name): Physical_Layer(name)
 {
 }
 
-void Dense_Layer::Forward(arma::vec& input, arma::vec& output)
+void Dense_Layer::forward(arma::vec& input, arma::vec& output)
 {
     output = (m_Weights * input) + m_Biases;
 }
 
-void Dense_Layer::Initialize_Weights(const std::string &array_path)
+void Dense_Layer::initialize_weights(const std::string &array_path)
 {
     auto array = cnpy::npz_load(array_path, "arr_0");
     auto shape = array.shape;

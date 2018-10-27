@@ -8,8 +8,8 @@ class ReLU_Layer : public Functional_layer
 public:
     ReLU_Layer(const QString &name);
 
-    void Forward(arma::cube &input, arma::cube &output) override;
-    void Forward(arma::vec &input, arma::vec &output) override;
+    void forward(arma::cube &input, arma::cube &output) override;
+    void forward(arma::vec &input, arma::vec &output) override;
 };
 
 #endif // RELU_LAYER_H
