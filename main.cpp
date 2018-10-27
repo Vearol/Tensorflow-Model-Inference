@@ -1,5 +1,8 @@
 #include <QCoreApplication>
 #include <QDebug>
+#include <QMap>
+#include <QFile>
+#include <QImage>
 
 #include "layers/layer.h"
 #include "layers/cnn_model.h"
@@ -14,8 +17,6 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-
-    //cnpy::NpyArray arr2 = cnpy::npz_load("/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/src/modelExport/saved_Layers/conv1_1/kernel:0.npz","arr_0");
 
     QString path = "/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/src/modelExport/saved_Layers";
     CNN_Model model(path);
@@ -137,7 +138,24 @@ int main(int argc, char *argv[])
     arma::vec dense_2_out = arma::zeros(2048);
     arma::vec dense_3_out = arma::zeros(200);
 
-    auto input = arma::cube(56, 56, 3, arma::fill::randu);
+    QImage image;
+    image.load("/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/tiny-imagenet-200/test/images/test_4.JPEG");
+
+    arma::cube input = arma::zeros(56, 56, 3);
+
+    for (auto i = 0; i < 56; i++)
+    {
+        for (auto j = 0; j < 56; j++)
+        {
+            auto pixel = image.pixel(i, j);
+
+            input.at(i, j, 0) = qRed(pixel) / 255.f;
+            input.at(i, j, 1) = qGreen(pixel) / 255.f;
+            input.at(i, j, 2) = qBlue(pixel) / 255.f;
+
+            qInfo() << input.at(i, j, 0) << input.at(i, j, 1) << input.at(i, j, 2);
+        }
+    }
 
     conv1_1->Forward(input, conv1_1_out);
     relu1_1->Forward(conv1_1_out, relu1_1_out);
@@ -169,8 +187,67 @@ int main(int argc, char *argv[])
     relu_dense2->Forward(dense_2_out, relu_dense2_out);
     dense_3->Forward(relu_dense2_out, dense_3_out);
 
-    qInfo() << dense_3_out.at(0);
+    QMap<float, QString> output_label;
+    QMap<QString, QString> label_text;
 
+    QFile outPutLabesFile("/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/tiny-imagenet-200/wnids.txt");
+    if (outPutLabesFile.open(QIODevice::ReadOnly))
+    {
+        auto i = 0;
+        QTextStream in(&outPutLabesFile);
+        while (!in.atEnd())
+        {
+            auto line = in.readLine();
+
+            output_label.insert(dense_3_out.at(i), line);
+        }
+        outPutLabesFile.close();
+    }
+
+    QFile labelsTextFile("/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/tiny-imagenet-200/words.txt");
+    if (labelsTextFile.open(QIODevice::ReadOnly))
+    {
+        QTextStream in(&labelsTextFile);
+
+        auto output_labes = output_label.values();
+        while (!in.atEnd())
+        {
+            auto line = in.readLine();
+            auto name_labes = line.split('\t');
+
+            if (output_labes.contains(name_labes[0]))
+            {
+                label_text.insert(name_labes[0], name_labes[1]);
+            }
+        }
+        labelsTextFile.close();
+    }
+
+    auto top_N = 5;
+    QSet<QString> top_N_labels;
+    top_N_labels.reserve(top_N);
+
+    for (auto top = 0; top < top_N; top++)
+    {
+        auto current_max = -1;
+
+        for (auto i = 0; i < 200; i++)
+        {
+            auto current_prediction = dense_3_out.at(i);
+
+            if (current_prediction > current_max)
+            {
+                if (top_N_labels.contains(output_label[current_prediction])) continue;
+
+                current_max = current_prediction;
+            }
+        }
+
+        auto current_max_label = output_label[current_max];
+
+        top_N_labels.insert(current_max_label);
+        qInfo() << label_text[current_max_label];
+    }
 
     return a.exec();
 }
