@@ -111,29 +111,30 @@ void VGG16::forward(const QString &image_path)
 
 void VGG16::top_n(int n)
 {
-    QSet<QString> top_N_labels;
-    top_N_labels.reserve(n);
+    QMap<int, QString> top_N_labels;
 
     for (auto top = 0; top < n; top++)
     {
-        auto current_max = -1;
+        auto current_max_prediction = -1.f;
+        auto current_max_index = -1;
 
         for (auto i = 0; i < 200; i++)
         {
             auto current_prediction = m_Model_output.at(i);
 
-            if (current_prediction > current_max)
+            if (current_prediction > current_max_prediction)
             {
-                if (top_N_labels.contains(m_Output_labels[current_prediction])) continue;
+                if (top_N_labels.contains(i)) continue;
 
-                current_max = current_prediction;
+                current_max_prediction = current_prediction;
+                current_max_index = i;
             }
         }
 
-        auto current_max_label = m_Output_labels[current_max];
+        auto current_max_label = m_Output_labels[current_max_index];
 
-        top_N_labels.insert(current_max_label);
-        qInfo() << m_Labels_text[current_max_label];
+        top_N_labels.insert(current_max_index, current_max_label);
+        qInfo() << m_Model_output[current_max_index] << ": " << m_Labels_text[current_max_label];
     }
 }
 

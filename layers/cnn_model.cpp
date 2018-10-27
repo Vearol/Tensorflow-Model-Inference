@@ -37,18 +37,19 @@ void CNN_Model::load_numbers_from_file()
     }
 }
 
-void CNN_Model::get_predicted_labels()
+void CNN_Model::load_labels()
 {
+    m_Output_labels.reserve(200);
+
     QFile output_labes_file("/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/tiny-imagenet-200/wnids.txt");
     if (output_labes_file.open(QIODevice::ReadOnly))
     {
-        auto i = 0;
         QTextStream in(&output_labes_file);
         while (!in.atEnd())
         {
             auto line = in.readLine();
 
-            m_Output_labels.insert(m_Model_output.at(i), line);
+            m_Output_labels.push_back(line);
         }
         output_labes_file.close();
     }
@@ -58,19 +59,16 @@ void CNN_Model::get_predicted_labels()
     {
         QTextStream in(&labels_text_file);
 
-        auto output_labes = m_Output_labels.values();
         while (!in.atEnd())
         {
             auto line = in.readLine();
             auto name_labes = line.split('\t');
 
-            if (output_labes.contains(name_labes[0]))
+            if (m_Output_labels.contains(name_labes[0]))
             {
                 m_Labels_text.insert(name_labes[0], name_labes[1]);
             }
         }
         labels_text_file.close();
     }
-
-    qInfo() << "Loaded labels: " << m_Labels_text.size() << m_Output_labels.size();
 }
