@@ -22,20 +22,12 @@ void Max_Pooling_Layer::forward(arma::cube& input, arma::cube& output)
                 );
     for (auto slide = 0; slide < m_InputDepth; slide ++)
     {
-        for (auto i = 0;
-             i <= m_InputHeight - m_PoolingWindowHeight;
-             i += m_VerticalStride)
+        for (auto i = 0; i <= m_InputHeight - m_PoolingWindowHeight; i += m_VerticalStride)
         {
-            for (auto j = 0;
-                 j <= m_InputWidth - m_PoolingWindowWidth;
-                 j += m_HorizontalStride)
+            for (auto j = 0; j <= m_InputWidth - m_PoolingWindowWidth; j += m_HorizontalStride)
             {
                 output.slice(slide)( i / m_VerticalStride, j / m_HorizontalStride) =
-                        input.slice(slide).submat(i,
-                                                 j,
-                                                 i + m_PoolingWindowHeight - 1,
-                                                 j + m_PoolingWindowWidth - 1)
-                        .max();
+                        input.slice(slide).submat(i, j, i + m_PoolingWindowHeight - 1, j + m_PoolingWindowWidth - 1).max();
             }
         }
     }

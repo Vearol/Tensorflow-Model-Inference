@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QSet>
+#include <QDebug>
 
 VGG16::VGG16(const QString &layers_directory_path) : CNN_Model(layers_directory_path)
 {
@@ -73,6 +74,7 @@ void VGG16::forward(const QString &image_path)
     arma::vec dense_1_out = arma::zeros(4096);
     arma::vec dense_2_out = arma::zeros(2048);
     arma::vec dense_3_out = arma::zeros(200);
+    arma::vec softmax_out = arma::zeros(200);
 
     auto input = image_to_cube(image_path);
 
@@ -107,6 +109,18 @@ void VGG16::forward(const QString &image_path)
     dense_3->forward(relu_dense2_out, dense_3_out);
 
     m_Model_output = dense_3_out;
+
+    auto max_num = -1.f;
+    auto max_index = -1;
+    for (auto i = 0; i < 200; i++){
+        if (m_Model_output.at(i) > max_num){
+            max_num = m_Model_output.at(i);
+            max_index = i;
+            qInfo() << m_Model_output.at(i);
+        }
+    }
+
+    qInfo() << "Max: " << max_num << ", " << max_index;
 }
 
 void VGG16::top_n(int n)
@@ -116,7 +130,7 @@ void VGG16::top_n(int n)
     for (auto top = 0; top < n; top++)
     {
         auto current_max_prediction = -1.f;
-        auto current_max_index = -1;
+        auto current_max_index = 0;
 
         for (auto i = 0; i < 200; i++)
         {
@@ -149,7 +163,7 @@ arma::cube VGG16::image_to_cube(const QString &image_path)
     {
         for (auto j = 0; j < 56; j++)
         {
-            auto pixel = image.pixel(i, j);
+            auto pixel = image.pixel(i+4, j+4);
 
             input.at(i, j, 0) = qRed(pixel) / 255.f;
             input.at(i, j, 1) = qGreen(pixel) / 255.f;

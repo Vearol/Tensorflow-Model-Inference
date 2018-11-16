@@ -28,8 +28,9 @@ void Dense_Layer::initialize_weights(const std::string &array_path)
     {
         for (auto j = 0; j < input_flatten_size; j++)
         {
-            index++;
             m_Weights.at(i, j) = array_numbers[index];
+
+            index++;
         }
     }
 

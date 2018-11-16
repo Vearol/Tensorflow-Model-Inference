@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     model->load_numbers_from_file();
     model->load_labels();
 
-    model->forward("/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/tiny-imagenet-200/test/images/test_4.JPEG");
+    model->forward("/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/tiny-imagenet-200/test/images/test_12.JPEG");
     model->top_n(5);
 
     return a.exec();
