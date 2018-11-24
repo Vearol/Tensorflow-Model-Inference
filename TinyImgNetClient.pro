@@ -15,6 +15,8 @@ CONFIG -= app_bundle
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
+INCLUDEPATH += yannpp/src
+
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
@@ -30,7 +32,11 @@ SOURCES += main.cpp \
     layers/layer.cpp \
     layers/physical_layer.cpp \
     layers/functional_layer.cpp \
-    layers/vgg16.cpp
+    layers/vgg16.cpp \
+    yannpp/src/common/utils.cpp \
+    yannpp/src/common/log.cpp \
+    yannpp/src/common/cpphelpers.cpp \
+    parsing/parsed_labels.cpp
 
 HEADERS += \
     layers/cnn_model.h \
@@ -42,7 +48,26 @@ HEADERS += \
     layers/layer.h \
     layers/physical_layer.h \
     layers/functional_layer.h \
-    layers/vgg16.h
+    layers/vgg16.h \
+    yannpp/src/common/utils.h \
+    yannpp/src/common/shape.h \
+    yannpp/src/common/log.h \
+    yannpp/src/common/cpphelpers.h \
+    yannpp/src/common/array3d_math.h \
+    yannpp/src/common/array3d.h \
+    yannpp/src/layers/poolinglayer.h \
+    yannpp/src/layers/layer_base.h \
+    yannpp/src/layers/fullyconnectedlayer.h \
+    yannpp/src/layers/crossentropyoutputlayer.h \
+    yannpp/src/layers/convolutionlayer.h \
+    yannpp/src/network/network2.h \
+    yannpp/src/network/activator.h \
+    loaders/layer_loader.h \
+    loaders/filesystem_layer_loader.h \
+    loaders/fs_convolution_layer_loader.h \
+    loaders/fs_fullyconnected_layer_loader.h \
+    loaders/fs_loader_factory.h \
+    parsing/parsed_labels.h
 
 unix:!macx: LIBS += -L$$PWD/../../../../../../../../usr/local/lib/ -lcnpy
 

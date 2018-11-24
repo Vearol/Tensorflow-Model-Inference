@@ -6,6 +6,11 @@
 #include <QSet>
 #include <QDebug>
 
+#include <network/network2.h>
+#include <layers/fullyconnectedlayer.h>
+#include <layers/convolutionlayer.h>
+#include <layers/poolinglayer.h>
+
 VGG16::VGG16(const QString &layers_directory_path) : CNN_Model(layers_directory_path)
 {
 }
@@ -14,33 +19,44 @@ void VGG16::init()
 {
     add_layer(conv1_1);
     add_layer(conv1_2);
+
     add_layer(conv2_1);
     add_layer(conv2_2);
+
     add_layer(conv3_1);
     add_layer(conv3_2);
     add_layer(conv3_3);
+
     add_layer(conv4_1);
     add_layer(conv4_2);
     add_layer(conv4_3);
+
     add_layer(relu1_1);
     add_layer(relu1_2);
+
     add_layer(relu2_1);
     add_layer(relu2_2);
+
     add_layer(relu3_1);
     add_layer(relu3_2);
     add_layer(relu3_3);
+
     add_layer(relu4_1);
     add_layer(relu4_2);
     add_layer(relu4_3);
+
     add_layer(relu_dense1);
     add_layer(relu_dense2);
+
     add_layer(max_pool_1);
     add_layer(max_pool_2);
     add_layer(max_pool_3);
     add_layer(max_pool_4);
+
     add_layer(dense_1);
     add_layer(dense_2);
     add_layer(dense_3);
+
     add_layer(soft_max);
 }
 
@@ -74,7 +90,6 @@ void VGG16::forward(const QString &image_path)
     arma::vec dense_1_out = arma::zeros(4096);
     arma::vec dense_2_out = arma::zeros(2048);
     arma::vec dense_3_out = arma::zeros(200);
-    arma::vec softmax_out = arma::zeros(200);
 
     auto input = image_to_cube(image_path);
 
@@ -112,11 +127,12 @@ void VGG16::forward(const QString &image_path)
 
     auto max_num = -1.f;
     auto max_index = -1;
-    for (auto i = 0; i < 200; i++){
-        if (m_Model_output.at(i) > max_num){
-            max_num = m_Model_output.at(i);
+    for (auto i = 0; i < 200; i++)
+    {
+        if (m_Model_output(i) > max_num)
+        {
+            max_num = m_Model_output(i);
             max_index = i;
-            qInfo() << m_Model_output.at(i);
         }
     }
 
@@ -125,7 +141,20 @@ void VGG16::forward(const QString &image_path)
 
 void VGG16::top_n(int n)
 {
-    QMap<int, QString> top_N_labels;
+    using p_t = std::pair<int, float>;
+    std::vector<p_t> items;
+    for (int i = 0; i < 200; i++) { items.emplace_back(i, m_Model_output(i)); }
+    std::sort(items.begin(), items.end(), [](p_t const &a, p_t const &b) {
+        // reverse sort
+        return a.second > b.second;
+    });
+
+    for (int i = 0; i < n; i++) {
+        auto &label = m_Output_labels[items[i].first];
+        qInfo() << items[i].second << ": " << m_Labels_text[label];
+    }
+
+    /*QMap<int, QString> top_N_labels;
 
     for (auto top = 0; top < n; top++)
     {
@@ -134,7 +163,7 @@ void VGG16::top_n(int n)
 
         for (auto i = 0; i < 200; i++)
         {
-            auto current_prediction = m_Model_output.at(i);
+            auto current_prediction = m_Model_output(i);
 
             if (current_prediction > current_max_prediction)
             {
@@ -149,7 +178,7 @@ void VGG16::top_n(int n)
 
         top_N_labels.insert(current_max_index, current_max_label);
         qInfo() << m_Model_output[current_max_index] << ": " << m_Labels_text[current_max_label];
-    }
+    }*/
 }
 
 arma::cube VGG16::image_to_cube(const QString &image_path)
@@ -163,11 +192,14 @@ arma::cube VGG16::image_to_cube(const QString &image_path)
     {
         for (auto j = 0; j < 56; j++)
         {
-            auto pixel = image.pixel(i+4, j+4);
+            int x = j, y = i;
 
-            input.at(i, j, 0) = qRed(pixel) / 255.f;
-            input.at(i, j, 1) = qGreen(pixel) / 255.f;
-            input.at(i, j, 2) = qBlue(pixel) / 255.f;
+            auto pixel = image.pixel(x+4, y+4);
+
+            // http://arma.sourceforge.net/docs.html#element_access
+            input(y, x, 0) = (qRed(pixel) - 128.f) / 128.f;
+            input(y, x, 1) = (qGreen(pixel) - 128.f) / 128.f;
+            input(y, x, 2) = (qBlue(pixel) - 128.f)/ 128.f;
         }
     }
 

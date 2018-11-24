@@ -1,0 +1,3 @@
+[submodule "yannpp"]
+	path = yannpp
+	url = https://github.com/ribtoks/yannpp.git

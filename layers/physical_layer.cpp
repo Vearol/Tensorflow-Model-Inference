@@ -41,6 +41,6 @@ void Physical_Layer::initialize_biases(const std::string &array_path)
 
     for (auto i = 0; i < shape; i++)
     {
-        m_Biases.at(i) = array_numbers[i];
+        m_Biases(i) = array_numbers[i];
     }
 }

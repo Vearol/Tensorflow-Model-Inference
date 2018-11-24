@@ -96,7 +96,7 @@ void Convolution_Layer::initialize_weights(const std::string &array_path)
             {
                 for (auto filter = 0; filter < m_NumFilters; filter++)
                 {
-                    m_Filters[filter].at(height, width, depth) = array_numbers[index];
+                    m_Filters[filter](height, width, depth) = array_numbers[index];
 
                     index++;
                 }

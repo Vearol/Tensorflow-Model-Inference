@@ -1,5 +1,7 @@
 #include "cnn_model.h"
 
+#include <cassert>
+
 #include <QDir>
 #include <QDebug>
 #include <QFile>
@@ -49,10 +51,10 @@ void CNN_Model::load_labels()
         {
             auto line = in.readLine();
 
-            m_Output_labels.push_back(line);
+            m_Output_labels.push_back(line.trimmed());
         }
-        output_labes_file.close();
     }
+    assert(m_Output_labels.size() == 200);
 
     QFile labels_text_file("/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/tiny-imagenet-200/words.txt");
     if (labels_text_file.open(QIODevice::ReadOnly))
@@ -62,13 +64,16 @@ void CNN_Model::load_labels()
         while (!in.atEnd())
         {
             auto line = in.readLine();
-            auto name_labes = line.split('\t');
+            auto name_labes = line.split('\t', QString::SkipEmptyParts);
+            for (auto &l: name_labes) { l = l.trimmed(); }
+            assert(name_labes.size() == 2);
 
             if (m_Output_labels.contains(name_labes[0]))
             {
                 m_Labels_text.insert(name_labes[0], name_labes[1]);
             }
         }
-        labels_text_file.close();
     }
+
+    assert(m_Labels_text.size() == 200);
 }
