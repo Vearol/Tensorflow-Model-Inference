@@ -9,7 +9,7 @@
 #include <QStringList>
 #include <QDebug>
 
-#include "cnpy.h"
+#include <cnpy/cnpy.h>
 
 #include <common/array3d.h>
 #include <common/shape.h>

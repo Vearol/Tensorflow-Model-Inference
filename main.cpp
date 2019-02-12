@@ -9,7 +9,7 @@
 #include <QDebug>
 #include <QImage>
 
-#include "cnpy.h"
+#include <cnpy/cnpy.h>
 
 #include <layers/layer_base.h>
 #include <layers/convolutionlayer.h>
@@ -23,6 +23,11 @@
 
 #include "loaders/fs_loader_factory.h"
 #include "parsing/parsed_labels.h"
+
+#define STRINGIZE_(x) #x
+#define STRINGIZE(x) STRINGIZE_(x)
+
+const QString testsDir = STRINGIZE(TESTS_DIR);
 
 using named_layers_list = std::vector<std::pair<std::shared_ptr<yannpp::layer_base_t<float>>, std::string>>;
 using layers_list = std::vector<std::shared_ptr<yannpp::layer_base_t<float>>>;
@@ -138,7 +143,7 @@ layers_list create_layers() {
           relu_activator), "fc3" }
     };
 
-    QString path = "/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/src/modelExport/saved_Layers";
+    QString path = testsDir + "/saved_Layers";
     fs_loader_factory<float> factory(path);
     for (auto &l: layers) {
         auto loader = factory.loader(l.first, l.second);
@@ -166,7 +171,6 @@ yannpp::array3d_t<float> read_image(const QString &path) {
 
             auto pixel = image.pixel(x+4, y+4);
 
-            // http://arma.sourceforge.net/docs.html#element_access
             input(x, y, 0) = (qRed(pixel) - 128.f) / 128.f;
             input(x, y, 1) = (qGreen(pixel) - 128.f) / 128.f;
             input(x, y, 2) = (qBlue(pixel) - 128.f)/ 128.f;
@@ -192,16 +196,16 @@ std::vector<int> find_top_n_indices(yannpp::array3d_t<float> const &data, int n)
     return result;
 }
 
-int main(int argc, char *argv[])
+int main(int, char *[])
 {
     auto layers = create_layers();
     yannpp::network2_t<float> network(std::move(layers));
-    auto input = read_image("/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/tiny-imagenet-200/test/images/test_4.JPEG");
+    auto input = read_image(testsDir + "/test_4.JPEG");
     auto output = network.feedforward(input);
 
     parsed_labels_t parsed_labels(
-                "/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/tiny-imagenet-200/wnids.txt",
-                "/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/tiny-imagenet-200/words.txt");
+                testsDir + "/wnids.txt",
+                testsDir + "/words.txt");
     parsed_labels.read();
     auto top_5 = find_top_n_indices(output, 5);
 

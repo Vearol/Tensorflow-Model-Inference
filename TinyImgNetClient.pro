@@ -1,11 +1,5 @@
 QT += gui
 
-LIBS += \
-    -llapack \
-    -larmadillo \
-    -lblas \
-    -L$$PWD/../../../../../../../../usr/local/lib/ -lcnpy
-
 CONFIG += c++11 console
 CONFIG -= app_bundle
 
@@ -15,7 +9,14 @@ CONFIG -= app_bundle
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
+INCLUDEPATH += $$(PWD)
 INCLUDEPATH += yannpp/src
+
+# zlib for cnpy
+LIBS += -lz
+
+TESTS_DIR = $$PWD/test
+DEFINES += TESTS_DIR=$${TESTS_DIR}
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -23,32 +24,13 @@ INCLUDEPATH += yannpp/src
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
-    layers/cnn_model.cpp \
-    layers/convolution_layer.cpp \
-    layers/dense_layer.cpp \
-    layers/max_pooling_layer.cpp \
-    layers/relu_layer.cpp \
-    layers/softmax_layer.cpp \
-    layers/layer.cpp \
-    layers/physical_layer.cpp \
-    layers/functional_layer.cpp \
-    layers/vgg16.cpp \
     yannpp/src/common/utils.cpp \
     yannpp/src/common/log.cpp \
     yannpp/src/common/cpphelpers.cpp \
-    parsing/parsed_labels.cpp
+    parsing/parsed_labels.cpp \
+    cnpy/cnpy.cpp
 
 HEADERS += \
-    layers/cnn_model.h \
-    layers/convolution_layer.h \
-    layers/dense_layer.h \
-    layers/max_pooling_layer.h \
-    layers/relu_layer.h \
-    layers/softmax_layer.h \
-    layers/layer.h \
-    layers/physical_layer.h \
-    layers/functional_layer.h \
-    layers/vgg16.h \
     yannpp/src/common/utils.h \
     yannpp/src/common/shape.h \
     yannpp/src/common/log.h \
@@ -67,9 +49,6 @@ HEADERS += \
     loaders/fs_convolution_layer_loader.h \
     loaders/fs_fullyconnected_layer_loader.h \
     loaders/fs_loader_factory.h \
-    parsing/parsed_labels.h
+    parsing/parsed_labels.h \
+    cnpy/cnpy.h
 
-unix:!macx: LIBS += -L$$PWD/../../../../../../../../usr/local/lib/ -lcnpy
-
-INCLUDEPATH += $$PWD/../../../../../../../../usr/local/include
-DEPENDPATH += $$PWD/../../../../../../../../usr/local/include
