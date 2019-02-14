@@ -26,12 +26,13 @@ protected:
         auto input_flatten_size = shape[0];
         auto output_size = shape[1];
 
-        this->weights_.emplace_back(yannpp::shape_matrix(output_size, input_flatten_size), 0);
+        // `tf.dense` behaves by contracting last index of input tensor with first index of weights tensor
+        this->weights_.emplace_back(yannpp::shape3d_t(output_size, input_flatten_size, 1), 0);
 
         auto index = 0;
-        for (auto i = 0; i < output_size; i++) {
-            for (auto j = 0; j < input_flatten_size; j++, index++) {
-                this->weights_[0](j, i) = array_numbers[index];
+        for (auto height = 0; height < input_flatten_size; height++) {
+            for (auto width = 0; width < output_size; width++) {
+                this->weights_[0](width, height) = array_numbers[index++];
             }
         }
     }

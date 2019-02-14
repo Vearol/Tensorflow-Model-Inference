@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <utility>
 
 #include <QString>
 
@@ -15,7 +16,7 @@ public:
 
 public:
     void read();
-    std::vector<std::string> describe(std::vector<int> const &indices);
+    std::vector<std::pair<std::string, float>> describe(const std::vector<std::pair<int, float> > &indices);
 
 private:
     void read_labels();

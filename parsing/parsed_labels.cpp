@@ -8,7 +8,7 @@
 #include <QTextStream>
 
 parsed_labels_t::parsed_labels_t(QString const &labels_filepath,
-                             QString const &descriptions_filepath):
+                                 QString const &descriptions_filepath):
     labels_filepath_(labels_filepath),
     descriptions_filepath_(descriptions_filepath)
 { }
@@ -18,12 +18,12 @@ void parsed_labels_t::read() {
     read_descriptions();
 }
 
-std::vector<std::string> parsed_labels_t::describe(const std::vector<int> &indices) {
-    std::vector<std::string> descriptions;
+std::vector<std::pair<std::string, float>> parsed_labels_t::describe(const std::vector<std::pair<int, float>> &indices) {
+    std::vector<std::pair<std::string, float>> descriptions;
     for (auto i: indices) {
-        const auto &label = labels_.at(i);
+        const auto &label = labels_.at(i.first);
         auto it = labels_to_words_.find(label);
-        descriptions.push_back(it->second);
+        descriptions.emplace_back(it->second, i.second);
     }
     return descriptions;
 }

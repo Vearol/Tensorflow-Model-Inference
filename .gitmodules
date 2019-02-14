@@ -1,3 +1,6 @@
 [submodule "yannpp"]
 	path = yannpp
 	url = https://github.com/ribtoks/yannpp.git
+[submodule "cnpy"]
+	path = cnpy
+	url = https://github.com/rogersce/cnpy.git
