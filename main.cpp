@@ -169,7 +169,7 @@ yannpp::array3d_t<float> read_image(const QString &path) {
         for (auto j = 0; j < 56; j++) {
             int x = j, y = i;
 
-            auto pixel = image.pixel(x+4, y+4);
+            auto pixel = image.pixel(y+4, x+4);
 
             input(x, y, 0) = (qRed(pixel) - 128.f) / 128.f;
             input(x, y, 1) = (qGreen(pixel) - 128.f) / 128.f;
@@ -180,7 +180,7 @@ yannpp::array3d_t<float> read_image(const QString &path) {
     return input;
 }
 
-std::vector<int> find_top_n_indices(yannpp::array3d_t<float> const &data, int n) {
+std::vector<std::pair<int, float>> find_top_n_indices(yannpp::array3d_t<float> const &data, int n) {
     using p_t = std::pair<int, float>;
     std::vector<p_t> items;
     const auto &shape = data.shape();
@@ -190,9 +190,9 @@ std::vector<int> find_top_n_indices(yannpp::array3d_t<float> const &data, int n)
         // reverse sort
         return a.second > b.second;
     });
-    std::vector<int> result;
+    std::vector<p_t> result;
     int i = 0;
-    for (auto &p: items) { result.push_back(p.first); if (i++ >= n) { break; } }
+    for (auto &p: items) { result.push_back(p); if (i++ >= n) { break; } }
     return result;
 }
 
@@ -201,6 +201,7 @@ int main(int, char *[])
     auto layers = create_layers();
     yannpp::network2_t<float> network(std::move(layers));
     auto input = read_image(testsDir + "/test_4.JPEG");
+    //yannpp::log(input);
     auto output = network.feedforward(input);
 
     parsed_labels_t parsed_labels(
@@ -209,8 +210,9 @@ int main(int, char *[])
     parsed_labels.read();
     auto top_5 = find_top_n_indices(output, 5);
 
+    std::cout << std::endl;
     for (auto &s: parsed_labels.describe(top_5)) {
-        std::cout << s << std::endl;
+        std::cout << s.first << " - " << s.second << std::endl;
     }
 
     //model->init();

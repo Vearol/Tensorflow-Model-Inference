@@ -51,7 +51,7 @@ public:
 protected:
     virtual void initialize_biases(const std::string &array_path) {
         auto array = cnpy::npz_load(array_path, "arr_0");
-        size_t shape = array.shape[0];
+        const size_t shape = array.shape[0];
         auto array_numbers = array.data<T>();
         biases_.emplace_back(yannpp::shape_row(shape), 0);
 
