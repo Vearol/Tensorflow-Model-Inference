@@ -24,26 +24,27 @@ DEFINES += TESTS_DIR=$${TESTS_DIR}
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
-    yannpp/src/common/utils.cpp \
-    yannpp/src/common/log.cpp \
-    yannpp/src/common/cpphelpers.cpp \
+    yannpp/src/yannpp/common/utils.cpp \
+    yannpp/src/yannpp/common/log.cpp \
+    yannpp/src/yannpp/common/cpphelpers.cpp \
     parsing/parsed_labels.cpp \
     cnpy/cnpy.cpp
 
 HEADERS += \
-    yannpp/src/common/utils.h \
-    yannpp/src/common/shape.h \
-    yannpp/src/common/log.h \
-    yannpp/src/common/cpphelpers.h \
-    yannpp/src/common/array3d_math.h \
-    yannpp/src/common/array3d.h \
-    yannpp/src/layers/poolinglayer.h \
-    yannpp/src/layers/layer_base.h \
-    yannpp/src/layers/fullyconnectedlayer.h \
-    yannpp/src/layers/crossentropyoutputlayer.h \
-    yannpp/src/layers/convolutionlayer.h \
-    yannpp/src/network/network2.h \
-    yannpp/src/network/activator.h \
+    yannpp/src/yannpp/common/utils.h \
+    yannpp/src/yannpp/common/shape.h \
+    yannpp/src/yannpp/common/log.h \
+    yannpp/src/yannpp/common/cpphelpers.h \
+    yannpp/src/yannpp/common/array3d_math.h \
+    yannpp/src/yannpp/common/array3d.h \
+    yannpp/src/yannpp/layers/poolinglayer.h \
+    yannpp/src/yannpp/layers/layer_base.h \
+    yannpp/src/yannpp/layers/layer_metadata.h \
+    yannpp/src/yannpp/layers/fullyconnectedlayer.h \
+    yannpp/src/yannpp/layers/crossentropyoutputlayer.h \
+    yannpp/src/yannpp/layers/convolutionlayer.h \
+    yannpp/src/yannpp/network/network2.h \
+    yannpp/src/yannpp/network/activator.h \
     loaders/layer_loader.h \
     loaders/filesystem_layer_loader.h \
     loaders/fs_convolution_layer_loader.h \

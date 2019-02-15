@@ -11,9 +11,9 @@
 
 #include <cnpy/cnpy.h>
 
-#include <common/array3d.h>
-#include <common/shape.h>
-#include <common/log.h>
+#include <yannpp/common/array3d.h>
+#include <yannpp/common/shape.h>
+#include <yannpp/common/log.h>
 
 #include "loaders/layer_loader.h"
 

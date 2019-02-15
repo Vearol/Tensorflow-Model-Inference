@@ -7,9 +7,10 @@
 #include <QString>
 #include <QDir>
 
-#include <layers/layer_base.h>
-#include <layers/convolutionlayer.h>
-#include <layers/fullyconnectedlayer.h>
+#include <yannpp/layers/layer_base.h>
+#include <yannpp/layers/layer_metadata.h>
+#include <yannpp/layers/convolutionlayer.h>
+#include <yannpp/layers/fullyconnectedlayer.h>
 
 #include "loaders/layer_loader.h"
 #include "loaders/fs_fullyconnected_layer_loader.h"
@@ -33,10 +34,10 @@ private:
     };
 
 public:
-    std::shared_ptr<layer_loader_t<T>> loader(std::shared_ptr<yannpp::layer_base_t<T>> const &layer,
-                                              std::string const &layer_name) {
+    std::shared_ptr<layer_loader_t<T>> loader(std::shared_ptr<yannpp::layer_base_t<T>> const &layer) {
         auto fc_layer = std::dynamic_pointer_cast<yannpp::fully_connected_layer_t<T>>(layer);
         auto cn_layer = std::dynamic_pointer_cast<yannpp::convolution_layer_t<T>>(layer);
+        auto &layer_name = layer->get_metadata().name;
         if (fc_layer != nullptr) {
             return fc(layer_name);
         } else if (cn_layer != nullptr) {
