@@ -167,7 +167,7 @@ layers_list create_layers() {
 
     fs_loader_factory<float> factory(testsDir + "/saved_Layers");
     const size_t size = layers.size();
-    for (size_t i = 0; i < size; i++) {
+    for (size_t i = size; i --> 0;) {
         auto layer = layers[i];
         auto loader = factory.loader(layer);
         futures.emplace_back(std::async(std::launch::async, [loader, layer](){
@@ -176,9 +176,8 @@ layers_list create_layers() {
         }));
     }
 
-    for (auto &f: futures) {
-        f.get();
-    }
+    // wait for all futures to finish
+    for (auto &f: futures) { f.get(); }
 
     return layers;
 }
