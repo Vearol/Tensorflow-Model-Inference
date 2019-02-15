@@ -35,7 +35,7 @@ public:
 
         for (auto &array_path: npz_arrays) {
             auto full_path = array_path.absoluteFilePath();
-            qInfo() << "Processing " << full_path;
+            qInfo() << "--- loading" << directory.dirName() << "/" << array_path.fileName();
 
             if (full_path.contains("kernel")) {
                 initialize_weights(full_path.toStdString());
@@ -45,6 +45,8 @@ public:
             if (full_path.contains("bias")) {
                 initialize_biases(full_path.toStdString());
             }
+
+            qInfo() << "loaded" << directory.dirName() << "/" << array_path.fileName();
         }
     }
 

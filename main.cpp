@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#include <future>
 #include <vector>
 #include <memory>
 #include <utility>
@@ -8,6 +9,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QImage>
+#include <QtGlobal>
 
 #include <cnpy/cnpy.h>
 
@@ -41,6 +43,8 @@ layers_list create_layers() {
     using fc_t = fully_connected_layer_t<float>;
     using pl_t = pooling_layer_t<float>;
     using m_t = layer_metadata_t;
+
+    qInfo() << "Creating layers...";
 
     layers_list layers = {
         /* ############## CONVOLUTION LAYER 1 ################# */
@@ -157,17 +161,29 @@ layers_list create_layers() {
         m_t{ "fc3" })
     };
 
+    qInfo() << "Loading layers...";
+
+    std::vector<std::future<void>> futures;
+
     fs_loader_factory<float> factory(testsDir + "/saved_Layers");
     for (auto &l: layers) {
         auto loader = factory.loader(l);
-        loader->load();
-        l->load(std::move(loader->weights()), std::move(loader->biases()));
+        futures.emplace_back(std::async(std::launch::async, [loader, l](){
+            loader->load();
+            l->load(std::move(loader->weights()), std::move(loader->biases()));
+        }));
+    }
+
+    for (auto &f: futures) {
+        f.get();
     }
 
     return layers;
 }
 
 yannpp::array3d_t<float> read_image(const QString &path) {
+    qInfo() << "Reading image" << path;
+
     QImage image;
     image.load(path);
 
@@ -205,13 +221,18 @@ std::vector<std::pair<int, float>> find_top_n_indices(yannpp::array3d_t<float> c
     return result;
 }
 
-int main(int, char *[])
-{
+int main(int, char *[]) {
+    qSetMessagePattern("%{time hh:mm:ss.zzz} %{type} T#%{threadid} %{function} - %{message}");
+
     auto layers = create_layers();
     yannpp::network2_t<float> network(std::move(layers));
     auto input = read_image(testsDir + "/test_4.JPEG");
-    //yannpp::log(input);
+
+    qInfo() << "Running inference...";
     auto output = network.feedforward(input);
+
+    qInfo() << "Output ready";
+    yannpp::log(output);
 
     parsed_labels_t parsed_labels(
                 testsDir + "/wnids.txt",
@@ -223,57 +244,4 @@ int main(int, char *[])
     for (auto &s: parsed_labels.describe(top_5)) {
         std::cout << s.first << " - " << s.second << std::endl;
     }
-
-    //model->init();
-    /*model->load_numbers_from_file();
-    model->load_labels();
-
-    model->forward();
-    model->top_n(5);
-
-    */
-/*
-    auto array = cnpy::npz_load("/home/lyubomyr/Projects/tiny_imagenet/multiple_nn/src/test_array.npz", "arr_0");
-    auto shape = array.shape;
-    auto array_numbers = array.data<double>();
-
-    auto d1 = shape[0];
-    auto d2 = shape[1];
-    auto d3 = shape[2];
-    auto d4 = shape[3];
-
-    QVector<arma::cube> cube_array;
-    cube_array.reserve(d4);
-
-    for (auto i = 0; i < d4; i++)
-    {
-        cube_array.push_back(arma::cube(d1, d2, d3));
-    }
-
-    auto index = 0;
-    for (auto i = 0; i < d1; i++)
-    {
-        for (auto j = 0; j < d2; j++)
-        {
-            for (auto z = 0; z < d3; z++)
-            {
-                for (auto q = 0; q < d4; q++)
-                {
-                    cube_array[q](i, j, z) = array_numbers[index];
-
-                    index++;
-                }
-            }
-        }
-    }
-
-    for (auto i = 0; i < d3; i++)
-    {
-        for (auto j = 0; j < d4; j++)
-        {
-            std::cout << std::fixed << std::setw(8) << std::setfill('0') << std::setprecision(6) << cube_array[j](1, 2, i) << '\t';
-        }
-        std::cout << std::endl;
-    }
-*/
 }
