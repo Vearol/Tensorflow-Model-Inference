@@ -166,11 +166,13 @@ layers_list create_layers() {
     std::vector<std::future<void>> futures;
 
     fs_loader_factory<float> factory(testsDir + "/saved_Layers");
-    for (auto &l: layers) {
-        auto loader = factory.loader(l);
-        futures.emplace_back(std::async(std::launch::async, [loader, l](){
+    const size_t size = layers.size();
+    for (size_t i = 0; i < size; i++) {
+        auto layer = layers[i];
+        auto loader = factory.loader(layer);
+        futures.emplace_back(std::async(std::launch::async, [loader, layer](){
             loader->load();
-            l->load(std::move(loader->weights()), std::move(loader->biases()));
+            layer->load(std::move(loader->weights()), std::move(loader->biases()));
         }));
     }
 
