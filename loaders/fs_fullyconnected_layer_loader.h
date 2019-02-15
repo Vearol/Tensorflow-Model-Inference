@@ -1,12 +1,13 @@
 #ifndef FS_FULLYCONNECTED_LAYER_LOADER_H
 #define FS_FULLYCONNECTED_LAYER_LOADER_H
 
+#include <vector>
 #include <string>
 
 #include <QString>
 
-#include <common/array3d.h>
-#include <common/shape.h>
+#include <yannpp/common/array3d.h>
+#include <yannpp/common/shape.h>
 
 #include "filesystem_layer_loader.h"
 
@@ -26,15 +27,22 @@ protected:
         auto input_flatten_size = shape[0];
         auto output_size = shape[1];
 
-        // `tf.dense` behaves by contracting last index of input tensor with first index of weights tensor
-        this->weights_.emplace_back(yannpp::shape3d_t(output_size, input_flatten_size, 1), 0);
+        const size_t size = input_flatten_size*output_size;
+        std::vector<T> transpose(size, T(0));
 
-        auto index = 0;
-        for (auto height = 0; height < input_flatten_size; height++) {
-            for (auto width = 0; width < output_size; width++) {
-                this->weights_[0](width, height) = array_numbers[index++];
-            }
+        int height = input_flatten_size, width = output_size;
+        // `tf.dense` behaves by contracting last index of input tensor with first index of weights tensor
+        // so saved tensor is actually a transpose matrix of shape (inputs_n, outputs_n, 1)
+        // do reverse transpose in memory
+        for(int n = 0; n < size; n++) {
+            int i = n / height;
+            int j = n % height;
+            transpose[n] = array_numbers[width*j + i];
         }
+
+        this->weights_.emplace_back(
+                    yannpp::shape3d_t(output_size, input_flatten_size, 1),
+                    std::move(transpose));
     }
 };
 

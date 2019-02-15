@@ -11,9 +11,9 @@
 
 #include <cnpy/cnpy.h>
 
-#include <common/array3d.h>
-#include <common/shape.h>
-#include <common/log.h>
+#include <yannpp/common/array3d.h>
+#include <yannpp/common/shape.h>
+#include <yannpp/common/log.h>
 
 #include "loaders/layer_loader.h"
 
@@ -35,16 +35,15 @@ public:
 
         for (auto &array_path: npz_arrays) {
             auto full_path = array_path.absoluteFilePath();
-            qInfo() << "Processing " << full_path;
+            qInfo() << ">> processing" << directory.dirName() << "/" << array_path.fileName();
 
             if (full_path.contains("kernel")) {
                 initialize_weights(full_path.toStdString());
-                continue;
-            }
-
-            if (full_path.contains("bias")) {
+            } else if (full_path.contains("bias")) {
                 initialize_biases(full_path.toStdString());
             }
+
+            qInfo() << "processed" << directory.dirName() << "/" << array_path.fileName();
         }
     }
 

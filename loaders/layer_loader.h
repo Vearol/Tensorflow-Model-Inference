@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include <common/array3d.h>
+#include <yannpp/common/array3d.h>
 
 template<typename T>
 class layer_loader_t {
