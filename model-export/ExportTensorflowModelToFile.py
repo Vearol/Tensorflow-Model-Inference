@@ -16,8 +16,8 @@ with tf.Session(graph=loaded_graph) as sess:
         print('Saving layer: {0}\n'.format(layer.name))
         array = layer.eval()
            
-        layer_dict = 'saved_Layers/' + layer.name.split('/')[0]
-        layer_file = 'saved_Layers/' + layer.name.replace(':', '_') + '.npz'
+        layer_dict = '../test/saved_Layers/' + layer.name.split('/')[0]
+        layer_file = '../test/saved_Layers/' + layer.name.replace(':', '_') + '.npz'
         
         if not os.path.exists(layer_dict):
             os.makedirs(layer_dict)
