@@ -24,10 +24,7 @@ install:
 before_build:
  - git submodule update --init --recursive
  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
- - pushd vendors\zlib
- - if %platform%==x86 x86.bat
- - if %platform%==X64 x64.bat
- - popd
+ - scripts\build_zlib.bat
  - qmake "CONFIG+=%configuration% appveyor" TinyImgNetClient.pro
 
 build_script:
