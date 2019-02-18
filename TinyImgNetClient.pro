@@ -22,7 +22,7 @@ win32 {
     DEFINES += ZLIB_WINAPI
     INCLUDEPATH += vendors/zlib
     LIBS += -L"$$PWD/vendors/zlib"
-    LIBS += -lz
+    LIBS += -lzlib
 }
 
 TESTS_DIR = $$PWD/test
