@@ -1,5 +1,7 @@
 # Tensorflow-Model-Inference
 
+[![Build status](https://ci.appveyor.com/api/projects/status/mxbh149x0e2altcg/branch/master?svg=true)](https://ci.appveyor.com/project/Vearol/tensorflow-model-inference/branch/master)
+
 With this project you can train your models using Tensorflow library on python, and export trained model to your C++ project 
 to use it without including official TF library for C++.
 
