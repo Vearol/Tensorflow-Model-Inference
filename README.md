@@ -27,9 +27,9 @@ Time required to prepare VGG-16 model and load weights and biases is around 1.3 
 `18:22:53.062 info T#8648 create_layers - Loading layers...` </br>
 `18:22:54.382 info T#8648 read_image - Reading image`
 </br> </br>
-Time required to feed forward a test image from Tiny-ImageNet is around 4.5 seconds </br>
-`18:22:54.382 info T#8648 main - Running inference...` </br>
-`18:22:58.950 info T#8648 main - Output ready`
+Time required to feed forward a test image from Tiny-ImageNet is around 1.1 seconds </br>
+`18:55:43.429 info T#7995 main - Running inference...` </br>
+`18:55:44.571 info T#7995 main - Output ready`
 
 ### Example - VGG-16
 As an example of usage I have chosen VGG-16 CNN model, which was trained on [TinyImageNet](https://tiny-imagenet.herokuapp.com/). </br> More details about VGG model and Tiny-ImageNet could be found in this article: [VGGNet and Tiny ImageNet](https://learningai.io/projects/2017/06/29/tiny-imagenet.html) </br>
