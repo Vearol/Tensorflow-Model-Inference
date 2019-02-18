@@ -16,6 +16,10 @@ skip_commits:
 
 platform:
   - x64
+  
+install:
+  - cmd: set PATH=%PATH%;%QTDIR%\bin
+  - qmake -v
 
 before_build:
  - git submodule update --init --recursive
