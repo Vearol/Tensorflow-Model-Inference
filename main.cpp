@@ -39,7 +39,7 @@ static yannpp::activator_t<float> relu_activator(yannpp::relu_v<float>, yannpp::
 layers_list create_layers() {
     using namespace yannpp;
 
-    using cnn_t = convolution_layer_t<float>;
+    using cnn_t = convolution_layer_2d_t<float>;
     using fc_t = fully_connected_layer_t<float>;
     using pl_t = pooling_layer_t<float>;
     using m_t = layer_metadata_t;

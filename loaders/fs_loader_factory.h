@@ -36,7 +36,7 @@ private:
 public:
     std::shared_ptr<layer_loader_t<T>> loader(std::shared_ptr<yannpp::layer_base_t<T>> const &layer) {
         auto fc_layer = std::dynamic_pointer_cast<yannpp::fully_connected_layer_t<T>>(layer);
-        auto cn_layer = std::dynamic_pointer_cast<yannpp::convolution_layer_t<T>>(layer);
+        auto cn_layer = std::dynamic_pointer_cast<yannpp::convolution_layer_base_t<T>>(layer);
         auto &layer_name = layer->get_metadata().name;
         if (fc_layer != nullptr) {
             return fc(layer_name);
