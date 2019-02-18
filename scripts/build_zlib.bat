@@ -1,5 +1,5 @@
 @echo off
 
-pushd zlib
+pushd vendors\zlib
 nmake -f win32/Makefile.msc
 popd
