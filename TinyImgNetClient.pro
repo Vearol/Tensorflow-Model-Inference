@@ -18,6 +18,7 @@ INCLUDEPATH += yannpp/src
 LIBS += -lz
 
 win32 {
+    DEFINES += NOMINMAX
     DEFINES += ZLIB_WINAPI
     INCLUDEPATH += vendors/zlib
     LIBS += -L"$$PWD/vendors/zlib"
