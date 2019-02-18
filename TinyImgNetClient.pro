@@ -21,6 +21,8 @@ win32 {
     DEFINES += NOMINMAX
     DEFINES += ZLIB_WINAPI
     INCLUDEPATH += vendors/zlib
+    
+    LIBS -= -lz
     LIBS += -L"$$PWD/vendors/zlib"
     LIBS += -lzlib
 }
