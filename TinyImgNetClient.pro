@@ -16,6 +16,13 @@ INCLUDEPATH += yannpp/src
 # zlib for cnpy
 LIBS += -lz
 
+win32 {
+    DEFINES += ZLIB_WINAPI
+    INCLUDEPATH += vendors/zlib
+    LIBS += -L"$$PWD/vendors/zlib"
+    LIBS += -lz
+}
+
 TESTS_DIR = $$PWD/test
 DEFINES += TESTS_DIR=$${TESTS_DIR}
 

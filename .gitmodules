@@ -4,3 +4,6 @@
 [submodule "cnpy"]
 	path = cnpy
 	url = https://github.com/rogersce/cnpy.git
+[submodule "vendors/zlib"]
+	path = vendors/zlib
+	url = https://github.com/madler/zlib.git
