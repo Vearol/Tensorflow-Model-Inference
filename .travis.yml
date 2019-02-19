@@ -1,0 +1,21 @@
+language: cpp
+os: linux
+compiler: gcc
+dist: trusty
+sudo: required
+
+git:
+  depth: 3
+  quiet: true
+  
+install:
+  - sudo add-apt-repository ppa:beineri/opt-qt597-trusty -y
+  - sudo apt-get update -qq
+  - sudo apt-get install qt59base
+  - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
+  - source /opt/qt59/bin/qt59-env.sh
+  
+script:
+  - qmake "CONFIG += debug" TinyImgNetClient.pro
+  - make
