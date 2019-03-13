@@ -11,7 +11,8 @@ You export your trained weights and biases to a `.npz` files, archived tensors a
 ### Model export
 * Requirements: tensorflow and numpy packages
 * Tensorflow model training: make sure you update [tf.GraphKeys.TRAINABLE_VARIABLES](https://www.tensorflow.org/api_docs/python/tf/GraphKeys#TRAINABLE_VARIABLES) during the training
-* Tensorflow session saver: check how do you save your session, because you will need to restore it in order to export your model to `.npy` files. Currently my exporting script works with `.meta` files. But it doesn't matter if you know how to restore your session with graph.
+* Tensorflow session saver: check how do you save your session, because you will need to restore it in order to export your model to `.npy` files. Currently my exporting script works with `.meta` files. But it doesn't matter if you know how to restore your session with graph
+* Run script from model-export folder and pass a path to your model as a parameter
 
 ### Inference in C++
 #### Create model
